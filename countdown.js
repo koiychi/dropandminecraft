@@ -56,3 +56,28 @@ if (closeBtn) {
         document.getElementById('joinServerSection').classList.add('d-none');
     });
 }
+
+// Gallery Modal Logic (minimal, no download/info)
+function showGalleryModal(imgSrc) {
+    const modal = document.getElementById('galleryModal');
+    document.getElementById('galleryModalImg').src = imgSrc;
+    modal.classList.remove('d-none');
+}
+
+function hideGalleryModal() {
+    document.getElementById('galleryModal').classList.add('d-none');
+    document.getElementById('galleryModalImg').src = '';
+}
+
+Array.from(document.getElementsByClassName('gallery-img')).forEach(function(img) {
+    img.addEventListener('click', function() {
+        showGalleryModal(img.src);
+    });
+});
+
+document.getElementById('closeGalleryModal').addEventListener('click', hideGalleryModal);
+// Optional: close modal on background click
+const galleryModal = document.getElementById('galleryModal');
+galleryModal.addEventListener('click', function(e) {
+    if (e.target === galleryModal) hideGalleryModal();
+});
