@@ -7,8 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="icon" href="images\7b6d4f34-7592-4cd6-83a4-68866ca7a121.jpeg" type="image/x-icon">
 </head>
-<body>
+<body style="padding-top: 0px;">
 
     <!-- Responsive Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -85,8 +86,8 @@
               <textarea class="form-control" id="customBody" rows="4" placeholder="Write your content here..." required></textarea>
             </div>
             <div class="mb-3">
-              <label for="customImage" class="form-label">Photo (optional)</label>
-              <input type="file" class="form-control" id="customImage" accept="image/*">
+              <label for="customMedia" class="form-label">Photo or Video (optional)</label>
+              <input type="file" class="form-control" id="customMedia" accept="image/*,video/*">
             </div>
             <div class="mb-3">
               <label for="customDate" class="form-label">Date (optional, e.g. May 29, 2025)</label>
@@ -143,42 +144,34 @@
     <!-- Featured Players Section -->
 <section class="container my-5" id="featuredPlayersSection">
   <h2 class="mb-4" style="font-family: 'Minecraft';">Featured Players</h2>
-  <div class="row g-4">
-    <!-- Player 1 -->
-    <div class="col-12 col-md-6 col-lg-6">
-      <div class="card h-100 shadow-sm text-center">
-        <img src="players/koiychii.jpeg" alt="Player 1" class="card-img-top mx-auto mt-3" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #bfa76a; background:#fff;">
-        <div class="card-body">
-          <div class="nametag mb-2 mx-auto" style="display:inline-block; background:#222; color:#fff; font-family:'Minecraft',monospace; font-size:1.1em; padding:0.3em 1.2em; border-radius:0.5em; border:2px solid #bfa76a; box-shadow:0 2px 8px #0002;">KOIYCHII</div>
-          <div class="mb-1"><span class="badge bg-success">Admin | Sandland President</span></div>
-          <div class="text-muted" style="font-size:0.95em;">Joined 2019</div>
+  <div class="featured-players-slider position-relative">
+    <div class="row g-4 flex-nowrap overflow-auto" id="featuredPlayersRow">
+      <!-- Player 1 -->
+      <div class="col-12 col-md-6 col-lg-6 px-2">
+        <div class="card h-100 shadow-sm text-center">
+          <img src="players/koiychii.jpeg" alt="Player 1" class="card-img-top mx-auto mt-3" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #bfa76a; background:#fff;">
+          <div class="card-body">
+            <div class="nametag mb-2 mx-auto" style="display:inline-block; background:#222; color:#fff; font-family:'Minecraft',monospace; font-size:1.1em; padding:0.3em 1.2em; border-radius:0.5em; border:2px solid #bfa76a; box-shadow:0 2px 8px #0002;">KOIYCHII</div>
+            <div class="mb-1"><span class="badge bg-success">Admin | Sandland President</span></div>
+            <div class="text-muted" style="font-size:0.95em;">Joined 2019</div>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Player 2 -->
-    <div class="col-12 col-md-6 col-lg-6">
-      <div class="card h-100 shadow-sm text-center">
-        <img src="players/Sm04macaspac.jpeg" alt="Player 2" class="card-img-top mx-auto mt-3" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #bfa76a; background:#fff;">
-        <div class="card-body">
-          <div class="nametag mb-2 mx-auto" style="display:inline-block; background:#222; color:#fff; font-family:'Minecraft',monospace; font-size:1.1em; padding:0.3em 1.2em; border-radius:0.5em; border:2px solid #bfa76a; box-shadow:0 2px 8px #0002;">Sm04macaspac</div>
-          <div class="mb-1"><span class="badge bg-primary">Sandland Vice President</span></div>
-          <div class="text-muted" style="font-size:0.95em;">Joined April 19, 2025</div>
+      <!-- Player 2 -->
+      <div class="col-12 col-md-6 col-lg-6 px-2">
+        <div class="card h-100 shadow-sm text-center">
+          <img src="players/Sm04macaspac.jpeg" alt="Player 2" class="card-img-top mx-auto mt-3" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #bfa76a; background:#fff;">
+          <div class="card-body">
+            <div class="nametag mb-2 mx-auto" style="display:inline-block; background:#222; color:#fff; font-family:'Minecraft',monospace; font-size:1.1em; padding:0.3em 1.2em; border-radius:0.5em; border:2px solid #bfa76a; box-shadow:0 2px 8px #0002;">Sm04macaspac</div>
+            <div class="mb-1"><span class="badge bg-primary">Sandland Vice President</span></div>
+            <div class="text-muted" style="font-size:0.95em;">Joined April 19, 2025</div>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Player 3 
-    <div class="col-12 col-md-6 col-lg-4">
-      <div class="card h-100 shadow-sm text-center">
-        <img src="players/koiychii.jpeg" alt="Player 3" class="card-img-top mx-auto mt-3" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:3px solid #bfa76a; background:#fff;">
-        <div class="card-body">
-          <div class="nametag mb-2 mx-auto" style="display:inline-block; background:#222; color:#fff; font-family:'Minecraft',monospace; font-size:1.1em; padding:0.3em 1.2em; border-radius:0.5em; border:2px solid #bfa76a; box-shadow:0 2px 8px #0002;">CreeperKing</div>
-          <div class="mb-1"><span class="badge bg-warning text-dark">Builder</span></div>
-          <div class="text-muted" style="font-size:0.95em;">Joined: May 29, 2024</div>
-        </div>
-      </div>
+      <!-- Add more player cards here as needed, using the same structure -->
     </div>
   </div>
-</section> -->
+</section>
 
 <!-- FEATURED PLACES 
 <section class="container my-5" id="ServerPlacesSection">
@@ -205,9 +198,19 @@
 </div>
 
     <!-- Sticky Tabs for News/Moments -->
-    <div id="newsMomentsTabs" class="sticky-top bg-white" style="top: 0px; z-index: 1049; border-bottom: 1px solid #ddd;">
+    <div id="newsMomentsTabs" class="bg-white">
       <div class="container">
-        <ul class="nav nav-tabs justify-content-center" id="newsMomentsTabNav" role="tablist">
+        <!-- Mobile Dropdown -->
+        <div class="d-block d-md-none mb-2">
+          <select class="form-select" id="newsMomentsTabDropdown">
+            <option value="newsTabPane">Server News</option>
+            <option value="momentsTabPane">Share your Moments!</option>
+            <option value="eventsTabPane">Sandland.gov</option>
+            <option value="featuredPlacesTabPane">Featured Places</option>
+          </select>
+        </div>
+        <!-- Desktop Tab Strip -->
+        <ul class="nav nav-tabs justify-content-center d-none d-md-flex" id="newsMomentsTabNav" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="news-tab" data-bs-toggle="tab" data-bs-target="#newsTabPane" type="button" role="tab" aria-controls="newsTabPane" aria-selected="true">Server News</button>
           </li>
@@ -259,7 +262,8 @@
                   <div id="googleFormContainer" style="display:none; margin-bottom:1rem;"></div>
                   <div id="adminContentSnippets">
                     <!-- Paste your HTML snippets here -->
-                    <div class='card mb-3'><div class='card-body'><img src="images/6dac7777-6ee7-4352-9b33-9b57fd7ad476.jpeg" alt="User uploaded" class="img-fluid rounded mb-2 w-100"><h5 class='card-title'>Post</h5><p class='card-text'>Content</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on May 29, 2025</p></div></div>
+                    <div class='card mb-3'><div class='card-body'><img src="images/6a2d00b5-f7d9-a90e-1281-ada51d82df79.jpeg" alt="User uploaded" class="img-fluid rounded mb-2 w-100"><h5 class='card-title'>Title</h5><p class='card-text'>Content</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on May 29, 2025</p></div></div>
+
                     <!--END-->
                   </div>
                 </div>
@@ -280,7 +284,7 @@
                   <p class="text-muted mb-3">Stay tuned for upcoming and past server events here by the Sandland Government.</p>
                   <div id="adminEventsList">
                     <!-- Paste exported HTML snippets for events below this line -->
-
+                     
                     <!-- End of admin events content -->
                   </div>
                 </div>
@@ -297,7 +301,7 @@
               <div class="card shadow-sm">
                 <div class="card-body">
                   <h2 class="card-title mb-3" style="font-family: 'Minecraft';">Explore and Discover!</h2>
-                  <p class="text-muted mb-3">Visit these when you join the server.</p>
+                  <p class="text-muted mb-3">Visit these places when you join the server.</p>
                   <div id="placesTab">
                     <!-- Paste exported HTML snippets for places here -->
                   </div>
@@ -316,10 +320,58 @@
       <div class="footer-right pe-3">
         <a href="index.html" class="text-white me-3 text-decoration-none">Home</a>
         <a href="#gallerySection" class="text-white me-3 text-decoration-none">Gallery</a>
-        <a href="#adminContentSection" class="text-white text-decoration-none">Share</a>
       </div>
     </footer>
     <script src="countdown.js"></script>
     <script src="index.js"></script>
 </body>
 </html>
+
+<style>
+@media (max-width: 768px) {
+  #featuredPlayersSection .row {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+  }
+  #featuredPlayersSection .card {
+    min-width: 80vw;
+    max-width: 350px;
+    margin: 0 auto;
+    scroll-snap-align: start;
+  }
+}
+@media (min-width: 769px) {
+  #featuredPlayersSection .row {
+    flex-wrap: wrap !important;
+    overflow-x: visible !important;
+    scroll-snap-type: none;
+  }
+  #featuredPlayersSection .card {
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    scroll-snap-align: none;
+  }
+}
+#newsMomentsTabs {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  width: 100vw;
+}
+body {
+  /* Add padding to prevent content from being hidden under sticky tabs */
+  padding-top: 70px;
+}
+#newsMomentsTabNav { display: none !important; }
+#newsMomentsTabDropdown { display: block !important; }
+@media (min-width: 768px) {
+  #newsMomentsTabNav { display: flex !important; }
+  #newsMomentsTabDropdown { display: none !important; }
+}
+</style>

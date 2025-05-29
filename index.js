@@ -1,6 +1,33 @@
 // Move custom content section JavaScript from index.html to this file
 
 document.addEventListener('DOMContentLoaded', function() {
+  // --- Tab Dropdown Logic (Mobile) ---
+  var dropdown = document.getElementById('newsMomentsTabDropdown');
+  if (dropdown) {
+    dropdown.addEventListener('change', function() {
+      var tabId = dropdown.value;
+      var tabPanes = document.querySelectorAll('.tab-pane');
+      tabPanes.forEach(function(pane) {
+        pane.classList.remove('show', 'active');
+      });
+      var selectedPane = document.getElementById(tabId);
+      if (selectedPane) {
+        selectedPane.classList.add('show', 'active');
+      }
+    });
+    // Set dropdown to match the active tab on load
+    var activePane = document.querySelector('.tab-pane.show.active');
+    if (activePane) {
+      dropdown.value = activePane.id;
+    }
+  }
+
+  // Hide the Create Content button by default
+  var customContentBtnContainer = document.getElementById('customContentBtnContainer');
+  if (customContentBtnContainer) {
+    customContentBtnContainer.style.display = 'none';
+  }
+
   const form = document.getElementById('customContentForm');
   const list = document.getElementById('customContentList');
   const formSection = form ? form.closest('.card-body') : null;
@@ -100,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const body = document.getElementById('customBody').value.trim();
       const imageInput = document.getElementById('customImage');
       const dateInput = document.getElementById('customDate');
+      const uploader = document.getElementById('customUploader').value.trim();
       let postDate = dateInput && dateInput.value.trim() ? dateInput.value.trim() : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       let imageHTML = '';
       let imageData = '';
@@ -145,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
       function addCardAndSave() {
         const card = document.createElement('div');
         card.className = 'card mb-3';
-        card.innerHTML = `<div class='card-body'>${imageHTML}<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on ${postDate}</p></div>`;
+        card.innerHTML = `<div class='card-body'>${imageHTML}<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader}on ${postDate}</p></div>`;
         list.prepend(card);
         form.reset();
         // --- Export HTML snippet for admin ---
@@ -169,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (imgTag) imgTag.removeAttribute('style');
                 snippet += img.innerHTML;
               }
-              snippet += `<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on ${postDate}</p></div></div>`;
+              snippet += `<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p></div></div>`;
               navigator.clipboard.writeText(snippet);
               copyBtn.textContent = 'Copied!';
               setTimeout(() => copyBtn.textContent = 'Copy HTML', 1200);
@@ -202,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (imgTag) imgTag.removeAttribute('style');
             snippet += img.innerHTML;
           }
-          snippet += `<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on ${postDate}</p></div></div>`;
+          snippet += `<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p></div></div>`;
           snippetPre.textContent = snippet;
         }
       }
@@ -227,9 +255,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Floating Custom Content Modal logic
+  // Custom Content Modal logic
   const customContentModal = document.getElementById('customContentModal');
-  const closeCustomContentModal = document.getElementById('closeCustomContentModal');
+  const openCustomContentModalBtn = document.getElementById('openCustomContentModal');
+  const closeCustomContentModalBtn = document.getElementById('closeCustomContentModal');
+  const customContentForm = document.getElementById('customContentForm');
+  const customContentList = document.getElementById('customContentList');
+  const customMediaInput = document.getElementById('customMedia');
 
   function showCustomContentModal() {
     customContentModal.classList.add('show');
@@ -245,8 +277,8 @@ document.addEventListener('DOMContentLoaded', function() {
     customContentModal.classList.remove('show');
     customContentModal.classList.add('d-none');
   }
-  if (closeCustomContentModal) {
-    closeCustomContentModal.addEventListener('click', hideCustomContentModal);
+  if (closeCustomContentModalBtn) {
+    closeCustomContentModalBtn.addEventListener('click', hideCustomContentModal);
   }
   // Optional: ESC key closes modal
   window.addEventListener('keydown', function(e) {
@@ -256,17 +288,71 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Show modal when admin clicks 'Create Content' button
-  const openCustomContentModalBtn = document.getElementById('openCustomContentModal');
   if (openCustomContentModalBtn) {
     openCustomContentModalBtn.addEventListener('click', showCustomContentModal);
   }
 
-  // When generating the snippet, include the Uploaded by field
-  function generateCustomContentSnippet(title, body, imageUrl, date, uploader) {
-    let imgHtml = imageUrl ? `<img src="${imageUrl}" alt="User uploaded" class="img-fluid rounded mb-2 w-100">` : '';
-    let byline = `<p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${date}</p>`;
-    return `<div class='card mb-3'><div class='card-body'>${imgHtml}<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p>${byline}</div></div>`;
-  }
+  // Custom content form submission logic
+  customContentForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const title = document.getElementById('customTitle').value;
+    const body = document.getElementById('customBody').value;
+    const date = document.getElementById('customDate').value || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const uploader = document.getElementById('customUploader').value;
+    const file = customMediaInput.files[0];
+
+    let mediaHTML = '';
+    if (file) {
+      const url = URL.createObjectURL(file);
+      if (file.type.startsWith('image/')) {
+        mediaHTML = `<img src="${url}" alt="User uploaded" class="img-fluid rounded mb-2 w-100 custom-media-thumb" style="cursor:pointer;max-height:350px;object-fit:contain;" onclick="showFullMedia('${url}','image')">`;
+      } else if (file.type.startsWith('video/')) {
+        mediaHTML = `<video src="${url}" controls class="img-fluid rounded mb-2 w-100 custom-media-thumb" style="cursor:pointer;max-height:350px;object-fit:contain;" onclick="showFullMedia('${url}','video')"></video>`;
+      }
+    }
+
+    const snippet = `<div class='card mb-3'><div class='card-body'>${mediaHTML}<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on ${date} by ${uploader}</p></div></div>`;
+    customContentList.insertAdjacentHTML('afterbegin', snippet);
+    customContentForm.reset();
+  });
+
+  // Full-size media modal logic
+  window.showFullMedia = function(url, type) {
+    let modal = document.getElementById('fullMediaModal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'fullMediaModal';
+      modal.style.position = 'fixed';
+      modal.style.top = '0';
+      modal.style.left = '0';
+      modal.style.width = '100vw';
+      modal.style.height = '100vh';
+      modal.style.background = 'rgba(0,0,0,0.9)';
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.style.zIndex = '3000';
+      modal.innerHTML = `<span id='closeFullMediaModal' style='position:absolute;top:20px;right:30px;font-size:2.5em;color:#fff;cursor:pointer;z-index:3100;'>&times;</span><div id='fullMediaContent'></div>`;
+      document.body.appendChild(modal);
+    }
+    const content = document.getElementById('fullMediaContent');
+    if (type === 'image') {
+      content.innerHTML = `<img src='${url}' class='img-fluid' style='max-width:95vw;max-height:85vh;border-radius:8px;'>`;
+    } else if (type === 'video') {
+      content.innerHTML = `<video src='${url}' controls autoplay class='img-fluid' style='max-width:95vw;max-height:85vh;border-radius:8px;background:#000;'></video>`;
+    }
+    modal.style.display = 'flex';
+    document.getElementById('closeFullMediaModal').onclick = function() {
+      modal.style.display = 'none';
+      content.innerHTML = '';
+    };
+    modal.onclick = function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        content.innerHTML = '';
+      }
+    };
+  };
 
   // Ensure the custom content modal is hidden on page load
   window.addEventListener('DOMContentLoaded', function() {

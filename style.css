@@ -150,3 +150,31 @@ body {
 footer.footer-custom {
   margin-top: auto;
 }
+
+/* Media Thumbnails and Full-Size Media Modal */
+.custom-media-thumb {
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+.custom-media-thumb:hover {
+  box-shadow: 0 4px 16px #0005;
+}
+#fullMediaModal {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.9);
+  z-index: 3000;
+}
+#fullMediaContent img, #fullMediaContent video {
+  max-width: 95vw;
+  max-height: 85vh;
+  border-radius: 8px;
+  background: #000;
+}
+@media (max-width: 768px) {
+  #fullMediaContent img, #fullMediaContent video {
+    max-width: 98vw;
+    max-height: 60vh;
+  }
+}
