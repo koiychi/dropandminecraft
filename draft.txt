@@ -1,0 +1,6 @@
+<div class="col-12 col-md-8">
+            <!-- Your main content here -->
+            <h1>Hello Minecraft world!</h1>
+            <p>Welcome to the official Drop and Minecraft website</p>
+          </div>
+          <br>

@@ -1,12 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-html {
-    scroll-behavior: smooth;
-}
 @font-face {
-    font-family: "Minecrafter";
+    font-family: "mcfont";
     font-style: normal;
-    src: url("fonts/minecraft_font.ttf") format('truetype');
+    src: url("fonts/minecraft.ttf") format('truetype');
     font-weight: normal;
 }
 @font-face {
@@ -14,6 +11,10 @@ html {
     font-style: normal;
     src: url("fonts/MinecraftTen-VGORe.ttf") format('truetype');
     font-weight: normal;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -37,4 +38,103 @@ body {
   z-index: 1050;
   background: #fff !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Custom Content Export Snippet Preview */
+#customContentExport {
+  max-height: 320px;
+  overflow-y: auto;
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 1em;
+  margin-top: 1em;
+  position: relative;
+}
+#customContentExport pre {
+  margin-top: 2.5em;
+  background: transparent;
+  border: none;
+  padding: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 1em;
+  user-select: all;
+}
+#customContentExport:focus-within pre, #customContentExport pre:focus {
+  outline: 2px solid #007bff;
+  background: #e9ecef;
+}
+
+/* Main Content Area Background and Blur */
+.main-content-bg {
+  background: url('site_images/main-bg.png') center center/cover no-repeat;
+  min-height: 400px;
+  position: relative;
+}
+.main-content-blur-bg {
+  background: inherit;
+  filter: blur(3px) brightness(0.92);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.main-content-bg::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -60px;
+  height: 180px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #f8f9fa 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+.main-content-bg > .container {
+  position: relative;
+  z-index: 3;
+}
+
+/* Sticky tab bar for News/Moments */
+#newsMomentsTabs {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+#newsMomentsTabs .nav-tabs {
+  border-bottom: none;
+}
+#newsMomentsTabs .nav-link {
+  font-family: 'Minecraft', 'Poppins', Arial, sans-serif;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #222;
+  border: none;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+#newsMomentsTabs .nav-link.active {
+  color: #007bff;
+  border-bottom: 3px solid #007bff;
+  background: #f8f9fa;
+}
+#newsMomentsTabs .nav-link:focus {
+  outline: none;
+}
+
+/* Hide default News/Moments sections outside tab panes */
+#news, #moments {
+  display: none;
+}
+
+/* Show News/Moments only in tab panes */
+.tab-pane #news, .tab-pane #moments {
+  display: block;
+}
+
+/* Floating Custom Content Modal Styles */
+#customContentModal {
+  display: none;
+}
+#customContentModal.show {
+  display: flex !important;
 }
