@@ -128,22 +128,20 @@ document.addEventListener('DOMContentLoaded', function() {
       const imageInput = document.getElementById('customImage');
       const dateInput = document.getElementById('customDate');
       const uploader = document.getElementById('customUploader').value.trim();
+      const youtubeInput = document.getElementById('customYoutube');
       let postDate = dateInput && dateInput.value.trim() ? dateInput.value.trim() : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       let imageHTML = '';
       let imageData = '';
+
       if (imageInput && imageInput.files && imageInput.files[0]) {
         const file = imageInput.files[0];
         const fileName = file.name;
-        // Try to use a relative path if the file exists in images/ or uploaded_images/
-        const tryPaths = [
-          `images/${fileName}`,
-          `uploaded_images/${fileName}`
-        ];
+        const tryPaths = [`images/${fileName}`, `uploaded_images/${fileName}`];
         let foundPath = null;
         let checkCount = 0;
+
         function checkNextPath() {
           if (checkCount >= tryPaths.length) {
-            // Fallback to base64 if not found
             const reader = new FileReader();
             reader.onload = function(event) {
               imageData = event.target.result;
@@ -166,201 +164,138 @@ document.addEventListener('DOMContentLoaded', function() {
           testImg.src = tryPaths[checkCount];
         }
         checkNextPath();
-        return; // Prevent addCardAndSave from running twice
+        return;
       } else {
         addCardAndSave();
       }
+
       function addCardAndSave() {
         const card = document.createElement('div');
         card.className = 'card mb-3';
-        card.innerHTML = `<div class='card-body'>${imageHTML}<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader}on ${postDate}</p></div>`;
+
+        let youtubeEmbed = '';
+        if (youtubeInput && youtubeInput.value.trim()) {
+          const youtubeURL = youtubeInput.value.trim();
+          const match = youtubeURL.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w\-]{11})/);
+          if (match) {
+            const videoId = match[1];
+            youtubeEmbed = `<div class='ratio ratio-16x9 mb-2'><iframe src='https://www.youtube.com/embed/${videoId}' frameborder='0' allowfullscreen></iframe></div>`;
+          }
+        }
+
+        const fullHTML = `
+          <div class='card-body'>
+            ${imageHTML}
+            <h5 class='card-title'>${title}</h5>
+            <p class='card-text'>${body}</p>
+            ${youtubeEmbed}
+            <p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p>
+          </div>
+        `;
+        card.innerHTML = fullHTML;
         list.prepend(card);
         form.reset();
-        // --- Export HTML snippet for admin ---
+
         if (formSection && formSection.style.display !== 'none') {
           let exportDiv = document.getElementById('customContentExport');
           if (!exportDiv) {
             exportDiv = document.createElement('div');
             exportDiv.id = 'customContentExport';
             exportDiv.style = 'background:#f8f9fa; border:1px solid #ccc; padding:1em; margin-top:1em; overflow:auto; position:relative;';
-            // Copy button
+
             const copyBtn = document.createElement('button');
             copyBtn.textContent = 'Copy HTML';
             copyBtn.className = 'btn btn-sm btn-outline-primary position-absolute';
             copyBtn.style = 'top:8px; right:8px;';
-            copyBtn.onclick = function() {
-              let snippet = `<div class='card mb-3'><div class='card-body'>`;
-              if (imageHTML) {
-                let img = document.createElement('div');
-                img.innerHTML = imageHTML;
-                let imgTag = img.querySelector('img');
-                if (imgTag) imgTag.removeAttribute('style');
-                snippet += img.innerHTML;
-              }
-              snippet += `<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p></div></div>`;
-              navigator.clipboard.writeText(snippet);
-              copyBtn.textContent = 'Copied!';
-              setTimeout(() => copyBtn.textContent = 'Copy HTML', 1200);
-            };
             exportDiv.appendChild(copyBtn);
-            // Snippet
-            var snippetPre = document.createElement('pre');
-            snippetPre.tabIndex = 0; // Make focusable for keyboard selection
+
+            const snippetPre = document.createElement('pre');
+            snippetPre.tabIndex = 0;
             snippetPre.setAttribute('title', 'Click to select all');
-            snippetPre.style = 'margin-top:2.5em; background:transparent; border:none; padding:0; white-space:pre-wrap; word-break:break-all;';
-            snippetPre.addEventListener('click', function() {
-              // Select all text in the <pre> on click
+            snippetPre.style = 'margin-top:2.5em; background:transparent; border:none; padding:0; white-space:pre-wrap; word-break:break-word;';
+            snippetPre.addEventListener('click', function () {
               const range = document.createRange();
               range.selectNodeContents(snippetPre);
               const sel = window.getSelection();
               sel.removeAllRanges();
               sel.addRange(range);
             });
+
             exportDiv.appendChild(snippetPre);
             form.parentNode.appendChild(exportDiv);
-          } else {
-            var snippetPre = exportDiv.querySelector('pre');
+
+            copyBtn.onclick = function () {
+              navigator.clipboard.writeText(snippetPre.textContent);
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => copyBtn.textContent = 'Copy HTML', 1200);
+            };
           }
-          // Use innerHTML for a cleaner snippet, and remove inline styles
-          let snippet = `<div class='card mb-3'><div class='card-body'>`;
-          if (imageHTML) {
-            let img = document.createElement('div');
-            img.innerHTML = imageHTML;
-            let imgTag = img.querySelector('img');
-            if (imgTag) imgTag.removeAttribute('style');
-            snippet += img.innerHTML;
-          }
-          snippet += `<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p></div></div>`;
-          snippetPre.textContent = snippet;
+
+          const exportSnippet = `
+<div class='card mb-3'><div class='card-body'>
+${imageHTML.replace(/ style="[^"]*"/g, '')}
+<h5 class='card-title'>${title}</h5>
+<p class='card-text'>${body}</p>
+${youtubeEmbed}
+<p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p>
+</div></div>
+          `.trim();
+
+          exportDiv.querySelector('pre').textContent = exportSnippet;
         }
       }
     });
   }
 
   // Google Form toggle logic for "Submit a post" button
+  /*
   const showGoogleFormBtn = document.getElementById('showGoogleFormBtn');
   const googleFormContainer = document.getElementById('googleFormContainer');
   if (showGoogleFormBtn && googleFormContainer) {
     showGoogleFormBtn.addEventListener('click', function() {
       if (googleFormContainer.style.display === 'none' || !googleFormContainer.style.display) {
-        // Insert your Google Form embed code here
         googleFormContainer.innerHTML = `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfDUMMYFORMURL/viewform?embedded=true" width="100%" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>`;
         googleFormContainer.style.display = 'block';
-        showGoogleFormBtn.textContent = 'Hide form';
       } else {
-        googleFormContainer.innerHTML = '';
         googleFormContainer.style.display = 'none';
-        showGoogleFormBtn.textContent = 'Submit a post.';
+        googleFormContainer.innerHTML = '';
       }
     });
-  }
+  } */
 
   // Custom Content Modal logic
   const customContentModal = document.getElementById('customContentModal');
   const openCustomContentModalBtn = document.getElementById('openCustomContentModal');
   const closeCustomContentModalBtn = document.getElementById('closeCustomContentModal');
-  const customContentForm = document.getElementById('customContentForm');
-  const customContentList = document.getElementById('customContentList');
-  const customMediaInput = document.getElementById('customMedia');
 
   function showCustomContentModal() {
-    customContentModal.classList.add('show');
-    customContentModal.classList.remove('d-none');
-    // Reset form fields
-    const form = document.getElementById('customContentForm');
-    if (form) form.reset();
-    // Clear snippet area
-    const snippetArea = document.getElementById('customContentList');
-    if (snippetArea) snippetArea.innerHTML = '<!-- Snippet preview and export area only -->';
+    if (customContentModal) {
+      customContentModal.classList.add('show');
+      customContentModal.classList.remove('d-none');
+      // Reset form fields
+      const form = document.getElementById('customContentForm');
+      if (form) form.reset();
+      // Clear snippet area
+      const snippetArea = document.getElementById('customContentList');
+      if (snippetArea) snippetArea.innerHTML = '<!-- Snippet preview and export area only -->';
+    }
   }
   function hideCustomContentModal() {
-    customContentModal.classList.remove('show');
-    customContentModal.classList.add('d-none');
+    if (customContentModal) {
+      customContentModal.classList.remove('show');
+      customContentModal.classList.add('d-none');
+    }
+  }
+  if (openCustomContentModalBtn) {
+    openCustomContentModalBtn.addEventListener('click', showCustomContentModal);
   }
   if (closeCustomContentModalBtn) {
     closeCustomContentModalBtn.addEventListener('click', hideCustomContentModal);
   }
   // Optional: ESC key closes modal
   window.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && customContentModal.classList.contains('show')) {
+    if (e.key === 'Escape' && customContentModal && customContentModal.classList.contains('show')) {
       hideCustomContentModal();
-    }
-  });
-
-  // Show modal when admin clicks 'Create Content' button
-  if (openCustomContentModalBtn) {
-    openCustomContentModalBtn.addEventListener('click', showCustomContentModal);
-  }
-
-  // Custom content form submission logic
-  customContentForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const title = document.getElementById('customTitle').value;
-    const body = document.getElementById('customBody').value;
-    const date = document.getElementById('customDate').value || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    const uploader = document.getElementById('customUploader').value;
-    const file = customMediaInput.files[0];
-
-    let mediaHTML = '';
-    if (file) {
-      const url = URL.createObjectURL(file);
-      if (file.type.startsWith('image/')) {
-        mediaHTML = `<img src="${url}" alt="User uploaded" class="img-fluid rounded mb-2 w-100 custom-media-thumb" style="cursor:pointer;max-height:350px;object-fit:contain;" onclick="showFullMedia('${url}','image')">`;
-      } else if (file.type.startsWith('video/')) {
-        mediaHTML = `<video src="${url}" controls class="img-fluid rounded mb-2 w-100 custom-media-thumb" style="cursor:pointer;max-height:350px;object-fit:contain;" onclick="showFullMedia('${url}','video')"></video>`;
-      }
-    }
-
-    const snippet = `<div class='card mb-3'><div class='card-body'>${mediaHTML}<h5 class='card-title'>${title}</h5><p class='card-text'>${body}</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on ${date} by ${uploader}</p></div></div>`;
-    customContentList.insertAdjacentHTML('afterbegin', snippet);
-    customContentForm.reset();
-  });
-
-  // Full-size media modal logic
-  window.showFullMedia = function(url, type) {
-    let modal = document.getElementById('fullMediaModal');
-    if (!modal) {
-      modal = document.createElement('div');
-      modal.id = 'fullMediaModal';
-      modal.style.position = 'fixed';
-      modal.style.top = '0';
-      modal.style.left = '0';
-      modal.style.width = '100vw';
-      modal.style.height = '100vh';
-      modal.style.background = 'rgba(0,0,0,0.9)';
-      modal.style.display = 'flex';
-      modal.style.alignItems = 'center';
-      modal.style.justifyContent = 'center';
-      modal.style.zIndex = '3000';
-      modal.innerHTML = `<span id='closeFullMediaModal' style='position:absolute;top:20px;right:30px;font-size:2.5em;color:#fff;cursor:pointer;z-index:3100;'>&times;</span><div id='fullMediaContent'></div>`;
-      document.body.appendChild(modal);
-    }
-    const content = document.getElementById('fullMediaContent');
-    if (type === 'image') {
-      content.innerHTML = `<img src='${url}' class='img-fluid' style='max-width:95vw;max-height:85vh;border-radius:8px;'>`;
-    } else if (type === 'video') {
-      content.innerHTML = `<video src='${url}' controls autoplay class='img-fluid' style='max-width:95vw;max-height:85vh;border-radius:8px;background:#000;'></video>`;
-    }
-    modal.style.display = 'flex';
-    document.getElementById('closeFullMediaModal').onclick = function() {
-      modal.style.display = 'none';
-      content.innerHTML = '';
-    };
-    modal.onclick = function(e) {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-        content.innerHTML = '';
-      }
-    };
-  };
-
-  // Ensure the custom content modal is hidden on page load
-  window.addEventListener('DOMContentLoaded', function() {
-    var customContentModal = document.getElementById('customContentModal');
-    if (customContentModal) {
-      customContentModal.classList.remove('show');
-      customContentModal.classList.add('d-none');
-      customContentModal.style.display = '';
     }
   });
 });

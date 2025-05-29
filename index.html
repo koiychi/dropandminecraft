@@ -86,8 +86,12 @@
               <textarea class="form-control" id="customBody" rows="4" placeholder="Write your content here..." required></textarea>
             </div>
             <div class="mb-3">
-              <label for="customMedia" class="form-label">Photo or Video (optional)</label>
-              <input type="file" class="form-control" id="customMedia" accept="image/*,video/*">
+              <label for="customMedia" class="form-label">Photo (optional)</label>
+              <input type="file" class="form-control" id="customMedia" accept="image/*">
+            </div>
+            <div class="mb-3">
+              <label for="customYoutube" class="form-label">YouTube Video Link (optional)</label>
+              <input type="url" class="form-control" id="customYoutube" placeholder="https://www.youtube.com/watch?v=...">
             </div>
             <div class="mb-3">
               <label for="customDate" class="form-label">Date (optional, e.g. May 29, 2025)</label>
@@ -116,6 +120,8 @@
             <h1 style="color: white; font-family: 'Minecraft';">Sandland 2025</h1>
             <h6 style="background-color: white; filter: transparency(3px); padding-top: 2px;padding-bottom: 2px; padding-left: 5px;">World</h6>
             <p style="color: white;">Welcome to the official Drop and Minecraft website</p>
+            <!-- Sandland Flag SVG, lower left -->
+            <img src="site_images/Sandland-removebg.png" alt="Sandland Flag" style="position: absolute; left: 0; bottom: -50px; width: 120px; max-width: 30vw; opacity: 0.95; z-index: 2; scale: 1.5; pointer-events: none;">
           </div>
           <div class="col-12 col-md-4">
             <!-- Sidebar or additional content -->
@@ -258,11 +264,16 @@
               <div class="card shadow-sm border-success">
                 <div class="card-body">
                   <h2 class="card-title mb-3" style="font-family: 'Minecraft';">Share your Moments!</h2>
-                  <p class="mb-3">Show your best moments and let us post it here. <button id="showGoogleFormBtn" type="button" class="btn btn-outline-primary btn-sm">Submit a post.</button></p>
+                  <p class="mb-3">Show your best moments and let us post it here. <a href="https://forms.gle/Ra7FqymgKwuqeN54A"><button id="showGoogleFormBtn" type="button" class="btn btn-outline-primary btn-sm">Submit a post.</button></a></p>
                   <div id="googleFormContainer" style="display:none; margin-bottom:1rem;"></div>
                   <div id="adminContentSnippets">
                     <!-- Paste your HTML snippets here -->
-                    <div class='card mb-3'><div class='card-body'><img src="images/6a2d00b5-f7d9-a90e-1281-ada51d82df79.jpeg" alt="User uploaded" class="img-fluid rounded mb-2 w-100"><h5 class='card-title'>Title</h5><p class='card-text'>Content</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted on May 29, 2025</p></div></div>
+                    <div class='card mb-3'><div class='card-body'>
+                        <h5 class='card-title'>t</h5>
+                        <p class='card-text'>c</p>
+                        <div class='ratio ratio-16x9 mb-2'><iframe src='https://www.youtube.com/embed/XtnfHKgvcjA' frameborder='0' allowfullscreen></iframe></div>
+                        <p class='text-muted mb-0' style='font-size:0.95em;'>Posted by koiychi on May 29, 2025</p>
+                        </div></div>
 
                     <!--END-->
                   </div>
@@ -284,7 +295,7 @@
                   <p class="text-muted mb-3">Stay tuned for upcoming and past server events here by the Sandland Government.</p>
                   <div id="adminEventsList">
                     <!-- Paste exported HTML snippets for events below this line -->
-                     
+                     <div class='card mb-3'><div class='card-body'><h5 class='card-title'>Test Title</h5><p class='card-text'>video</p><p class='text-muted mb-0' style='font-size:0.95em;'>Posted by koiychi on May 29, 2025</p></div></div>
                     <!-- End of admin events content -->
                   </div>
                 </div>
