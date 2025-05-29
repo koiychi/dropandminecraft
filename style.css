@@ -17,6 +17,14 @@ html {
     scroll-behavior: smooth;
 }
 
+html, body {
+  height: 100%;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 body {
     background-color: #6EB1FF;
     font-family: 'Poppins', Arial, sans-serif;
@@ -137,4 +145,8 @@ body {
 }
 #customContentModal.show {
   display: flex !important;
+}
+
+footer.footer-custom {
+  margin-top: auto;
 }

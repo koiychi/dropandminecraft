@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (username === 'admin' && password === 'dropandminecraft') {
           hideDevLoginModal();
           if (formSection) formSection.style.display = '';
+          if (customContentBtnContainer) customContentBtnContainer.style.display = '';
         } else {
           const errorDiv = document.getElementById('devLoginError');
           errorDiv.textContent = 'Invalid credentials.';
