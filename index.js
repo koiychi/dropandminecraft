@@ -120,81 +120,82 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('customContents', JSON.stringify(entries));
   }
 
+  // --- Tab system for media input (image or YouTube) ---
+  const imageTab = document.getElementById('image-tab');
+  const youtubeTab = document.getElementById('youtube-tab');
+  const imageTabPane = document.getElementById('imageTabPane');
+  const youtubeTabPane = document.getElementById('youtubeTabPane');
+  const imageInput = document.getElementById('customImage');
+  const youtubeInput = document.getElementById('customYoutube');
+
+  function setMediaTab(tab) {
+    if (tab === 'image') {
+      imageTab.classList.add('active');
+      youtubeTab.classList.remove('active');
+      imageTabPane.classList.add('show', 'active');
+      youtubeTabPane.classList.remove('show', 'active');
+      imageInput.disabled = false;
+      youtubeInput.disabled = true;
+      youtubeInput.value = '';
+    } else {
+      youtubeTab.classList.add('active');
+      imageTab.classList.remove('active');
+      youtubeTabPane.classList.add('show', 'active');
+      imageTabPane.classList.remove('show', 'active');
+      youtubeInput.disabled = false;
+      imageInput.disabled = true;
+      imageInput.value = '';
+    }
+  }
+  if (imageTab && youtubeTab) {
+    imageTab.addEventListener('click', function() { setMediaTab('image'); });
+    youtubeTab.addEventListener('click', function() { setMediaTab('youtube'); });
+    // Default to image tab
+    setMediaTab('image');
+  }
+
   if (form && list) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       const title = document.getElementById('customTitle').value.trim();
       const body = document.getElementById('customBody').value.trim();
-      const imageInput = document.getElementById('customImage');
       const dateInput = document.getElementById('customDate');
       const uploader = document.getElementById('customUploader').value.trim();
-      const youtubeInput = document.getElementById('customYoutube');
       let postDate = dateInput && dateInput.value.trim() ? dateInput.value.trim() : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
       let imageHTML = '';
+      let youtubeEmbed = '';
       let imageData = '';
 
-      if (imageInput && imageInput.files && imageInput.files[0]) {
-        const file = imageInput.files[0];
-        const fileName = file.name;
-        const tryPaths = [`images/${fileName}`, `uploaded_images/${fileName}`];
-        let foundPath = null;
-        let checkCount = 0;
-
-        function checkNextPath() {
-          if (checkCount >= tryPaths.length) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-              imageData = event.target.result;
-              imageHTML = `<img src='${imageData}' alt='User uploaded' class='img-fluid rounded mb-2 w-100' style='max-height:300px;object-fit:contain;'>`;
-              addCardAndSave();
-            };
-            reader.readAsDataURL(file);
-            return;
-          }
-          const testImg = new window.Image();
-          testImg.onload = function() {
-            foundPath = tryPaths[checkCount];
-            imageHTML = `<img src='${foundPath}' alt='User uploaded' class='img-fluid rounded mb-2 w-100' style='max-height:300px;object-fit:contain;'>`;
-            addCardAndSave();
-          };
-          testImg.onerror = function() {
-            checkCount++;
-            checkNextPath();
-          };
-          testImg.src = tryPaths[checkCount];
-        }
-        checkNextPath();
-        return;
-      } else {
-        addCardAndSave();
-      }
+      // Only allow one media type
+      const isImageTab = imageTab.classList.contains('active');
+      const isYoutubeTab = youtubeTab.classList.contains('active');
 
       function addCardAndSave() {
         const card = document.createElement('div');
         card.className = 'card mb-3';
-
-        let youtubeEmbed = '';
-        if (youtubeInput && youtubeInput.value.trim()) {
-          const youtubeURL = youtubeInput.value.trim();
-          const match = youtubeURL.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w\-]{11})/);
-          if (match) {
-            const videoId = match[1];
-            youtubeEmbed = `<div class='ratio ratio-16x9 mb-2'><iframe src='https://www.youtube.com/embed/${videoId}' frameborder='0' allowfullscreen></iframe></div>`;
-          }
+        let exportSnippet = `<div class='card mb-3><div class='card-body'>\n`;
+        if (isImageTab && imageHTML) {
+          exportSnippet += `${imageHTML.replace(/ style=\"[^\"]*\"/g, '')}\n`;
         }
+        exportSnippet += `<h5 class='card-title'>${title}</h5>\n<p class='card-text'>${body}</p>\n`;
+        if (isYoutubeTab && youtubeEmbed) {
+          exportSnippet += `${youtubeEmbed}\n`;
+        }
+        exportSnippet += `<p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p>\n</div></div>`;
 
         const fullHTML = `
           <div class='card-body'>
-            ${imageHTML}
+            ${isImageTab && imageHTML ? imageHTML : ''}
             <h5 class='card-title'>${title}</h5>
             <p class='card-text'>${body}</p>
-            ${youtubeEmbed}
+            ${isYoutubeTab && youtubeEmbed ? youtubeEmbed : ''}
             <p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p>
           </div>
         `;
         card.innerHTML = fullHTML;
         list.prepend(card);
         form.reset();
+        setMediaTab('image');
 
         if (formSection && formSection.style.display !== 'none') {
           let exportDiv = document.getElementById('customContentExport');
@@ -231,19 +232,51 @@ document.addEventListener('DOMContentLoaded', function() {
             };
           }
 
-          const exportSnippet = `
-<div class='card mb-3'><div class='card-body'>
-${imageHTML.replace(/ style="[^"]*"/g, '')}
-<h5 class='card-title'>${title}</h5>
-<p class='card-text'>${body}</p>
-${youtubeEmbed}
-<p class='text-muted mb-0' style='font-size:0.95em;'>Posted by ${uploader} on ${postDate}</p>
-</div></div>
-          `.trim();
-
-          exportDiv.querySelector('pre').textContent = exportSnippet;
+          exportDiv.querySelector('pre').textContent = exportSnippet.trim();
         }
       }
+
+      // --- Decide what the user submitted and build the snippet ---
+      if (isYoutubeTab) {
+        const youtubeURL = youtubeInput.value.trim();
+        const match = youtubeURL.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w\-]{11})/);
+        if (match) {
+          const videoId = match[1];
+          youtubeEmbed = `<div class='ratio ratio-16x9 mb-2'><iframe src='https://www.youtube.com/embed/${videoId}' frameborder='0' allowfullscreen></iframe></div>`;
+        }
+        addCardAndSave();
+        return;
+      }
+      if (isImageTab && imageInput && imageInput.files && imageInput.files[0]) {
+        const file = imageInput.files[0];
+        const fileName = file.name;
+        const tryPaths = [`images/${fileName}`, `uploaded_images/${fileName}`];
+        let foundPath = null;
+        let checkCount = 0;
+        function checkNextPath() {
+          if (checkCount >= tryPaths.length) {
+            // Not found: remind user to upload the file
+            imageHTML = `<div class='alert alert-warning'>Image file not found in <code>images/</code> or <code>uploaded_images/</code>. Please add <strong>${fileName}</strong> to the site files and try again.</div>`;
+            addCardAndSave();
+            return;
+          }
+          const testImg = new window.Image();
+          testImg.onload = function() {
+            foundPath = tryPaths[checkCount];
+            imageHTML = `<img src='${foundPath}' alt='User uploaded' class='img-fluid rounded mb-2 w-100' style='max-height:300px;object-fit:contain;'>`;
+            addCardAndSave();
+          };
+          testImg.onerror = function() {
+            checkCount++;
+            checkNextPath();
+          };
+          testImg.src = tryPaths[checkCount];
+        }
+        checkNextPath();
+        return;
+      }
+      // If neither, just render text
+      addCardAndSave();
     });
   }
 
