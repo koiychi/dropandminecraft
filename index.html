@@ -124,7 +124,7 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="main-content-bg position-relative" style="overflow:hidden; padding-bottom: 450px; margin-bottom: -30px;">
+    <div class="main-content-bg position-relative" style="overflow:hidden; padding-bottom: 510px; margin-bottom: -30px;">
       <div class="main-content-blur-bg position-absolute top-0 start-0 w-100 h-100" style="z-index:0;"></div>
       <div class="container my-4 position-relative" style="z-index:1;">
         <div class="row">
@@ -267,7 +267,7 @@
                 <div class="card-body">
                   <h2 class="card-title mb-3" style="font-family: 'Minecraft';">Server News</h2>
                   <p class="text-muted mb-3">Keep updated with server events through this feed.</p>
-                  <div id="adminContentList">
+                  <div id="adminContentList" class="p-0 m-0">
 
 
                     <!-- Paste exported HTML snippets below this line -->
@@ -416,5 +416,50 @@ body {
 @media (min-width: 768px) {
   #newsMomentsTabNav { display: flex !important; }
   #newsMomentsTabDropdown { display: none !important; }
+}
+#adminContentList, #adminContentSnippets, #adminEventsList, #placesTab {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+#adminContentList > .card,
+#adminContentSnippets > .card,
+#adminEventsList > .card,
+#placesTab > .card {
+  margin-bottom: 1rem !important;
+}
+#adminContentList > .card:last-child,
+#adminContentSnippets > .card:last-child,
+#adminEventsList > .card:last-child,
+#placesTab > .card:last-child {
+  margin-bottom: 0 !important;
+}
+/* Remove extra space below last section before footer */
+section.container.my-5:last-of-type {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+.tab-content > .tab-pane:last-child > section.container.my-5 {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Hide off-canvas/modal overlays so they don't take up space when hidden */
+#joinServerSection.d-none,
+#devLoginModal.d-none,
+#customContentModal.d-none {
+  display: none !important;
+  position: fixed !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  min-height: 0 !important;
+  min-width: 0 !important;
+  max-height: 0 !important;
+  max-width: 0 !important;
 }
 </style>

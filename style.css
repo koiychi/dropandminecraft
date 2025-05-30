@@ -106,7 +106,13 @@ body {
 
 /* Sticky tab bar for News/Moments */
 #newsMomentsTabs {
+  position: sticky;
+  top: 70px; /* height of navbar or adjust as needed */
+  z-index: 1100;
+  background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-top: 2.5rem !important;
+  margin-bottom: calc(0.0001rem-200px) !important;
 }
 #newsMomentsTabs .nav-tabs {
   border-bottom: none;
@@ -139,12 +145,47 @@ body {
   display: block;
 }
 
+/* Hide tab panes that are not active to prevent them from taking up space */
+.tab-pane:not(.active) {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
+/* Add space between visible tab panes/sections */
+.tab-pane.active > section.container.my-5 {
+  margin-bottom: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Add space below tab content and above the footer */
+.tab-content {
+  margin-bottom: 2.5rem !important;
+}
+
+#adminContentList > .card,
+#adminContentSnippets > .card,
+#adminEventsList > .card,
+#placesTab > .card {
+  margin-bottom: 1.5rem !important;
+}
+
 /* Floating Custom Content Modal Styles */
 #customContentModal {
   display: none;
 }
 #customContentModal.show {
   display: flex !important;
+}
+
+/* Add space above the footer for all main sections */
+footer.footer-custom {
+  margin-top: 2rem !important;
 }
 
 footer.footer-custom {

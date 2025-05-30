@@ -4,6 +4,16 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- Tab Dropdown Logic (Mobile) ---
   var dropdown = document.getElementById('newsMomentsTabDropdown');
   if (dropdown) {
+    // Always set to Server News on load
+    dropdown.value = 'newsTabPane';
+    var tabPanes = document.querySelectorAll('.tab-pane');
+    tabPanes.forEach(function(pane) {
+      pane.classList.remove('show', 'active');
+    });
+    var selectedPane = document.getElementById('newsTabPane');
+    if (selectedPane) {
+      selectedPane.classList.add('show', 'active');
+    }
     dropdown.addEventListener('change', function() {
       var tabId = dropdown.value;
       var tabPanes = document.querySelectorAll('.tab-pane');
@@ -15,11 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedPane.classList.add('show', 'active');
       }
     });
-    // Set dropdown to match the active tab on load
-    var activePane = document.querySelector('.tab-pane.show.active');
-    if (activePane) {
-      dropdown.value = activePane.id;
-    }
   }
 
   // Hide the Create Content button by default
