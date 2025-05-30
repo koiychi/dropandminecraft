@@ -2,7 +2,7 @@
 // Calculates time left until October 23, 2025 and updates the #time element
 
 function updateCountdown() {
-    const futureDate = new Date('October 23, 2025 00:00:00');
+    const futureDate = new Date('December 31, 2029 23:59:59');
     const now = new Date();
     let diff = futureDate - now;
 
