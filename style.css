@@ -108,7 +108,7 @@ body {
 #newsMomentsTabs {
   position: sticky;
   top: 70px; /* height of navbar or adjust as needed */
-  z-index: 1100;
+  z-index: 3;
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   margin-top: 2.5rem !important;

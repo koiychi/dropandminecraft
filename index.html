@@ -31,17 +31,22 @@
     </nav> 
 
     <!-- Join Server Section (hidden by default) -->
-    <div id="joinServerSection" class="d-none" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:1050; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center;">
+    <div id="joinServerSection" class="d-none" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:1050; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index: 2000;">
       <div class="card position-relative" style="max-width:500px; width:90vw;">
         <button type="button" id="closeJoinServer" class="btn-close position-absolute" style="top:10px; right:10px; z-index:1100;" aria-label="Close"></button>
         <div class="card-body">
           <h2 class="card-title">Join Us!</h2>
-          <p class="card-text">Let's drop everything and play Minecraft! Server will be online only upon player requests.</p>
+          <p class="card-text">Let's drop everything and play Minecraft! You may now start and join the server without an admin! <br><br> First, click the button below, then type <strong>dropandminecraft</strong> on the form, prove you're not a robot, and lastly click "Start Server". </p>
           <ul>
-            <li>Server IP: <strong>147.185.221.16</strong></li>
-            <li>Port: <strong>64399</strong></li>
-            <li>Version: <strong>1.21.81</strong></li>
-            Available for Minecraft: Bedrock Edition only.
+             <a href="https://falixnodes.net/startserver?ip=dropandminecraft.falixsrv.me" class="btn btn-sm btn-warning" style="background: rgba(251, 191, 36, 0.2); border: 1px solid #FCD34D; color: #000;"> Start Server </a> <br><br>
+
+            <strong>Add Server</strong>
+            <li>Server IP: <strong>dropandminecraft.falixsvr.me | 46.224.41.6</strong></li>
+            <li>Port: <strong>51734</strong></li>
+            <li>Version: <strong>Latest</strong></li>
+            <a href="minecraft://?addExternalServer=Direct%20Server|46.224.41.6:51734" class="btn btn-sm btn-warning" style="background: rgba(251, 191, 36, 0.2); border: 1px solid #FCD34D; color: #000;">
+									<svg class="svg-inline--fa me-2" viewBox="0 0 448 512" width="0.875em" height="1em" fill="currentColor" aria-hidden="true"><path d="M0 32l214.6 0 0 214.6-214.6 0 0-214.6zm233.4 0l214.6 0 0 214.6-214.6 0 0-214.6zM0 265.4l214.6 0 0 214.6-214.6 0 0-214.6zm233.4 0l214.6 0 0 214.6-214.6 0 0-214.6z"></path></svg> Quick Connect: Add to Minecraft Bedrock								</a> <br>
+            Available for Minecraft: Bedrock Edition and Java!
           </ul>
           <div class="row">
             <div class="col-md-12 text-center">
@@ -133,6 +138,26 @@
             <h6 style="background-color: white; filter: transparency(3px); padding-top: 2px;padding-bottom: 2px; padding-left: 5px;">World</h6>
             <p style="color: white;">Welcome to the official Drop and Minecraft website</p>
             <!-- Sandland Flag, lower left -->
+            <img id="serverStatus" src="https://api.mcstatus.io/v2/widget/bedrock/dropandminecraft.falixsrv.me:51734?transparent=true&rounded=true&t=" alt="DropAndMinecraft Bedrock Server Status" style="max-width:100%; max-height:50%;"/>
+
+            <script>
+              let refreshInterval = 1000; // 1 second
+              let timer = null;
+
+              function refreshWidget() {
+                const img = document.getElementById("serverStatus");
+                img.src =
+                  "https://api.mcstatus.io/v2/widget/bedrock/dropandminecraft.falixsrv.me:51734?transparent=true&rounded=true&t=" +
+                  Date.now();
+              }
+
+              function startRefreshing() {
+                timer = setInterval(refreshWidget, refreshInterval);
+              }
+
+              startRefreshing();
+            </script>
+
             <img src="site_images/Sandland-removebg.png" alt="Sandland Flag" style="position: absolute; left: 5px; bottom: -50px; width: 120px; max-width: 30vw; opacity: 0.95; z-index: 2; scale: 1.5; pointer-events: none;">
           </div>
           <div class="col-12 col-md-4">
@@ -239,7 +264,7 @@
           </select>
         </div>
         <!-- Desktop Tab Strip -->
-        <ul class="nav nav-tabs justify-content-center d-none d-md-flex" id="newsMomentsTabNav" role="tablist">
+        <ul class="nav nav-tabs justify-content-center d-none d-md-flex" id="newsMomentsTabNav" role="tablist" style="z-index: 0;">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="news-tab" data-bs-toggle="tab" data-bs-target="#newsTabPane" type="button" role="tab" aria-controls="newsTabPane" aria-selected="true">Server News</button>
           </li>
